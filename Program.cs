@@ -37,10 +37,13 @@
 
 
             pubSub.Publish("topic1", "Hello 1");
+            Console.WriteLine("Published topic 1");
             pubSub.Publish("topic2", "Hello 2");
+            Console.WriteLine("Published topic 2");
 
 
-            Console.WriteLine("End");
+            Console.WriteLine("End, press any key to exit....");
+            Console.WriteLine();
             Console.ReadKey();
         }
     }
