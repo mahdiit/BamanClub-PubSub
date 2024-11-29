@@ -1,50 +1,31 @@
-﻿namespace BamanClub_PubSub
+﻿using SimplePubSub;
+
+namespace BamanClub_PubSub
 {
     internal class Program
     {
         static void Main(string[] args)
         {
             Console.WriteLine("Start");
-            var pubSub = new PubSubHandler<string>();
-            
-            pubSub.Subscribe("topic1",  async (string data) =>
-            {
-                await Task.Delay(1000);
-                Console.WriteLine($"{DateTime.Now.ToShortTimeString()}\tTopic 1 Sub1\t{data.ToString()}");
-                
+            var pubSub = new MemoryPubSubHandler<int>();            
+            const int cards = 50;
+
+            pubSub.Subscribe("CardsHandler", async (int param) =>{
+
+            for(int i = 0; i < param; i++){
+                await Task.Delay(200 * i);
+
+                pubSub.Publish("CardsStatus", i);
+            }
             });
 
-            pubSub.Subscribe("topic2", async (string data) =>
-            {
-                await Task.Delay(3000);
-                Console.WriteLine($"{DateTime.Now.ToShortTimeString()}\tTopic 2 Sub 1\t{data.ToString()}");
-                
+            pubSub.Subscribe("CardsStatus",  (int param) => {
+                Console.WriteLine($"{DateTime.Now.ToShortTimeString()}\t{param}\t{(Convert.ToDecimal( param)/ Convert.ToDecimal(cards)) * 100}");
+                return Task.CompletedTask;
             });
-
-
-            pubSub.Subscribe("topic1", async (string data) =>
-            {
-                await Task.Delay(5000);
-                Console.WriteLine($"{DateTime.Now.ToShortTimeString()}\tTopic 1 Sub 2\t{data.ToString()}");
-                
-            });
-
-            pubSub.Subscribe("topic2", async (string data) =>
-            {
-                await Task.Delay(4500);
-                Console.WriteLine($"{DateTime.Now.ToShortTimeString()}\tTopic2 Sub 2\t{data.ToString()}");
-                
-            });
-
-
-            pubSub.Publish("topic1", "Hello 1");
-            Console.WriteLine("Published topic 1");
-            pubSub.Publish("topic2", "Hello 2");
-            Console.WriteLine("Published topic 2");
-
-
             Console.WriteLine("End, press any key to exit....");
             Console.WriteLine();
+            pubSub.Publish("CardsHandler", cards);
             Console.ReadKey();
         }
     }

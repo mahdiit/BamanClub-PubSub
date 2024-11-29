@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace SimplePubSub
 {
-    public delegate Task SubscribeHandler<T>(T data);
-    public interface IPubSubHandler<T>
+    public delegate Task SubscribeHandler<in D>(D data);
+    
+    public interface IPubSubHandler<D>
     {
-        void Subscribe(string topic, SubscribeHandler<T> handler);
-        void Unsubscribe(string topic, SubscribeHandler<T> hadnler);
-        void Publish(string topic, T value);
+        void Subscribe(string topic, SubscribeHandler<D> handler);
+        void Unsubscribe(string topic, SubscribeHandler<D> hadnler);
+        void Publish(string topic, D value);
     }
 }
