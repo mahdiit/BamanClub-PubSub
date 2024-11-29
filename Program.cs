@@ -5,15 +5,16 @@
         static void Main(string[] args)
         {
             Console.WriteLine("Start");
-            var pubSub = new PubSubHandler();
-            pubSub.Subscribe("topic1",  async (object data) =>
+            var pubSub = new PubSubHandler<string>();
+            
+            pubSub.Subscribe("topic1",  async (string data) =>
             {
                 await Task.Delay(1000);
                 Console.WriteLine($"{DateTime.Now.ToShortTimeString()}\tTopic 1 Sub1\t{data.ToString()}");
                 
             });
 
-            pubSub.Subscribe("topic2", async (object data) =>
+            pubSub.Subscribe("topic2", async (string data) =>
             {
                 await Task.Delay(3000);
                 Console.WriteLine($"{DateTime.Now.ToShortTimeString()}\tTopic 2 Sub 1\t{data.ToString()}");
@@ -21,14 +22,14 @@
             });
 
 
-            pubSub.Subscribe("topic1", async (object data) =>
+            pubSub.Subscribe("topic1", async (string data) =>
             {
                 await Task.Delay(5000);
                 Console.WriteLine($"{DateTime.Now.ToShortTimeString()}\tTopic 1 Sub 2\t{data.ToString()}");
                 
             });
 
-            pubSub.Subscribe("topic2", async (object data) =>
+            pubSub.Subscribe("topic2", async (string data) =>
             {
                 await Task.Delay(4500);
                 Console.WriteLine($"{DateTime.Now.ToShortTimeString()}\tTopic2 Sub 2\t{data.ToString()}");
